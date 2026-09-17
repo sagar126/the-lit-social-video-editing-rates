@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sagar Rudach — Video Editor Rates</title>
+<style>
+  :root{
+    --blue:#62a9e8;
+    --blue-dark:#428fd2;
+    --ink:#11151a;
+    --paper:#f7f7f4;
+    --white:#ffffff;
+    --muted:#6d747b;
+    --line:#d9dde1;
+    --yellow:#ffe95b;
+    --pink:#ff4fb0;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    color:var(--ink);
+    background:var(--paper);
+    font-family:Arial, Helvetica, sans-serif;
+    overflow-x:hidden;
+  }
+
+  /* subtle paper/grid texture inspired by the reference */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.34;
+    background-image:radial-gradient(#aeb6bd .8px, transparent .8px);
+    background-size:8px 8px;
+    mask-image:linear-gradient(to bottom, #000 0%, transparent 78%);
+    z-index:-1;
+  }
+
+  .page{
+    width:min(1180px, calc(100% - 34px));
+    min-width:0;
+    margin:auto;
+  }
+
+  .topbar{
+    padding:22px 0 10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    font-size:12px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-width:0;
+  }
+
+  .brand a{color:inherit;text-decoration:none}
+
+  .brand-mark{
+    width:30px;height:30px;border-radius:50%;
+    background:var(--blue);
+    display:grid;place-items:center;
+    border:2px solid var(--ink);
+    font-size:13px;
+  }
+
+  .verified{
+    display:inline-grid;place-items:center;
+    width:15px;height:15px;border-radius:50%;
+    background:#168cff;color:white;font-size:9px;
+  }
+
+  .location{
+    color:var(--muted);
+    text-align:right;
+  }
+
+  .hero{
+    min-height:clamp(480px, 54vw, 570px);
+    padding:clamp(35px, 5vw, 55px) 0 35px;
+    display:grid;
+    grid-template-columns:minmax(0, 1.15fr) minmax(280px, .85fr);
+    gap:clamp(28px, 4vw, 50px);
+    align-items:center;
+  }
+
+  .section-hero-note{
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 30px);
+    align-items: start;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:var(--white);
+    border:1px solid var(--ink);
+    padding:7px 11px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    box-shadow:3px 3px 0 var(--ink);
+  }
+
+  .eyebrow::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:#36c66b;
+  }
+
+  h1{
+    margin:20px 0 10px;
+    font-family:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-weight:900;
+    font-size:clamp(58px, 8vw, 132px);
+    line-height:.88;
+    letter-spacing:-.0055em;
+    text-transform:uppercase;
+  }
+
+  h1 span{
+    display:block;
+    color:var(--blue);
+    -webkit-text-stroke:1px var(--ink);
+  }
+
+  .hero-copy{
+    max-width:560px;
+    font-size:18px;
+    line-height:1.45;
+    font-weight:600;
+  }
+
+  .hero-copy strong{color:var(--blue-dark)}
+
+
+  .pill{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:8px 11px;
+    font-size:11px;
+    font-weight:800;
+  }
+
+  .hero-note{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    max-width:560px;
+  }
+
+  /* pricing visual */
+    .note{ 
+    height: fit-content;
+    align-self: start;
+    width: 100%;
+    min-width: 0;
+    position: relative;
+    background: var(--white);
+    border: 2px solid var(--ink);
+    border-radius: 22px;
+    padding: 15px;
+    box-shadow: 10px 10px 0 var(--ink);
+      transform:translateX(-20px) translateY(20px) rotate(-1.2deg);
+    }
+
+  .note .section-title {
+    margin: 0 0 15px;
+}
+
+.note .mini-rate {
+    display: block;
+    padding: 18px;
+}
+
+.note .mini-rate strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+  .profile-card{
+    position:relative;
+    background:var(--white);
+    border:2px solid var(--ink);
+    border-radius:22px;
+    padding:25px;
+    min-width:0;
+    box-shadow:10px 10px 0 var(--ink);
+    transform:rotate(1.2deg);
+  }
+
+  .star{
+    position:absolute;
+    top:-27px;right:28px;
+    width:58px;height:58px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 93%,50% 71%,21% 93%,32% 57%,2% 35%,39% 35%);
+  }
+
+  .profile-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+    min-width:0;
+  }
+
+  .profile-head > div:last-child{min-width:0}
+
+  .avatar{
+    width:66px;height:66px;border-radius:50%;
+    background:var(--blue);
+    border:3px solid var(--ink);
+    box-shadow:0 0 0 4px #e9edf0;
+    display:grid;place-items:center;
+    font-weight:900;
+    font-size:15px;
+  }
+
+  .profile-name{
+    font-size:18px;
+    font-weight:900;
+  }
+
+  .handle{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:3px;
+    overflow-wrap:anywhere;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    padding:18px 0;
+  }
+
+  .stat{
+    text-align:center;
+    border-right:1px solid var(--line);
+  }
+  .stat:last-child{border:0}
+  .stat b{display:block;font-size:20px}
+  .stat small{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:800}
+
+  .mini-rate{
+    background:var(--blue);
+    border-radius:12px;
+    padding:17px;
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:15px;
+    min-width:0;
+  }
+
+  .mini-rate > div{min-width:0}
+
+  .mini-rate small{
+    display:block;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+  }
+  .mini-rate strong{
+    display:block;
+    margin-top:3px;
+    font-size:30px;
+  }
+  .mini-rate span{
+    font-size:11px;
+    font-weight:800;
+    text-align:right;
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin:50px 0 24px;
+  }
+
+  .section-title h2{
+    margin:0;
+    font-family:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size:clamp(32px, 4vw, 48px);
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:-.03em;
+  }
+
+  .section-title .line{
+    height:2px;
+    flex:1;
+    background:var(--ink);
+  }
+
+  .pricing{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    align-items:stretch;
+  }
+
+  .plan{
+    position:relative;
+    background:var(--white);
+    border:2px solid var(--ink);
+    border-radius:15px;
+    padding:25px 23px 23px;
+    display:flex;
+    flex-direction:column;
+    min-height:570px;
+    min-width:0;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+
+  .plan:hover{
+    transform:translateY(-7px) rotate(-.4deg);
+    box-shadow:7px 7px 0 var(--ink);
+  }
+
+  .plan.recommended{
+    background:var(--blue);
+    transform:translateY(-10px);
+    box-shadow:7px 7px 0 var(--ink);
+  }
+
+  .plan.recommended:hover{transform:translateY(-16px) rotate(.4deg)}
+
+  .badge{
+    position:absolute;
+    top:-13px;right:17px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    padding:6px 10px;
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    transform:rotate(3deg);
+  }
+
+  .plan-label{
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+    opacity:.72;
+  }
+
+  .plan h3{
+    margin:8px 0 4px;
+    font-size:27px;
+    font-weight:900;
+  }
+
+  .price{
+    font-family:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size:55px;
+    line-height:1;
+    letter-spacing:-.025em;
+    margin:8px 0 3px;
+  }
+
+  .per{
+    font-size:11px;
+    font-weight:800;
+    color:var(--muted);
+  }
+  .recommended .per{color:#183b5b}
+
+  .features{
+    list-style:none;
+    padding:22px 0 0;
+    margin:20px 0 0;
+    border-top:1px solid currentColor;
+    flex:1;
+  }
+
+  .features li{
+    position:relative;
+    padding:7px 0 7px 22px;
+    font-size:13px;
+    font-weight:650;
+    line-height:1.25;
+  }
+
+  .features li::before{
+    content:"✓";
+    position:absolute;
+    left:0;
+    top:7px;
+    font-weight:900;
+  }
+
+  .hours{
+    margin-top:18px;
+    padding:10px 12px;
+    border:1px dashed currentColor;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:900;
+  }
+
+  .plan-button{
+    margin-top:17px;
+    border:2px solid var(--ink);
+    background:var(--ink);
+    color:white;
+    border-radius:7px;
+    padding:12px;
+    text-align:center;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+  }
+
+  .recommended .plan-button{
+    background:white;
+    color:var(--ink);
+  }
+
+  .comparison{
+    width:100%;
+    margin:55px 0 30px;
+    background:var(--ink);
+    color:white;
+    border-radius:17px;
+    padding:25px;
+    overflow:hidden;
+    min-width:0;
+  }
+
+  .comparison h2{
+    margin:0 0 18px;
+    font-family:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size:35px;
+    text-transform:uppercase;
+  }
+
+  .comparison-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    border-top:1px solid #555b60;
+  }
+
+  .comparison-grid > div{
+    padding:12px 10px;
+    border-bottom:1px solid #444a4f;
+    font-size:11px;
+    font-weight:700;
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+
+  .comparison-grid .head{
+    font-weight:900;
+    color:var(--blue);
+    text-transform:uppercase;
+    font-size:10px;
+  }
+
+  .footer{
+    padding:45px 0 60px;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:end;
+    border-top:2px solid var(--ink);
+    margin-top:50px;
+  }
+
+  .footer-big{
+    font-family:Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    font-size:clamp(48px,7vw,90px);
+    line-height:.8;
+    text-transform:uppercase;
+  }
+  .footer-big span{color:var(--blue)}
+  .footer-note{
+    max-width:330px;
+    font-size:12px;
+    line-height:1.5;
+    font-weight:600;
+    text-align:right;
+    overflow-wrap:anywhere;
+  }
+
+  @media(max-width:1000px){
+    .hero{grid-template-columns:minmax(0, 1fr) minmax(260px, .8fr)}
+    .profile-card{padding:20px}
+    .price{font-size:clamp(42px, 5vw, 55px)}
+  }
+
+  @media(max-width:850px){
+    .hero{grid-template-columns:1fr; padding-top:35px; min-height:auto}
+    .profile-card{max-width:560px;width:100%;margin:15px auto 20px}
+    .pricing{grid-template-columns:1fr}
+    .plan,.plan.recommended{min-height:auto;transform:none}
+    .plan:hover,.plan.recommended:hover{transform:translateY(-5px)}
+    .section-hero-note{grid-template-columns:1fr;}
+    .note{max-width:560px;margin:15px auto 20px;transform:rotate(-1.2deg)}
+    .comparison{margin-top:25px;overflow-x:auto}
+    .comparison-grid{min-width:650px}
+  }
+
+  @media(max-width:560px){
+    .page{width:min(100% - 22px,1180px)}
+    .topbar{align-items:flex-start;font-size:10px}
+    .brand{align-items:flex-start}
+    .location{max-width:130px}
+    h1{font-size:clamp(56px, 17vw, 72px)}
+    .hero-copy{font-size:16px}
+    .section-title{gap:10px;margin:38px 0 20px}
+    .section-title h2{font-size:clamp(29px, 9vw, 38px)}
+    .note{padding:18px;box-shadow:6px 6px 0 var(--ink);transform:none}
+    .profile-card{padding:18px;box-shadow:6px 6px 0 var(--ink)}
+    .profile-head{gap:11px}
+    .profile-name{font-size:16px}
+    .stats{gap:4px}
+    .stat b{font-size:17px}
+    .mini-rate{align-items:flex-start;flex-direction:column;gap:8px}
+    .mini-rate strong{font-size:clamp(24px, 8vw, 30px);overflow-wrap:anywhere}
+    .mini-rate span{text-align:left}
+    .comparison{padding:18px;margin-top:20px}
+    .comparison h2{font-size:30px}
+    .comparison-grid{min-width:590px}
+    .footer{display:block}
+    .footer-note{text-align:left;margin-top:25px}
+  }
+
+  @media(max-width:360px){
+    .page{width:calc(100% - 16px)}
+    .topbar{display:block}
+    .location{text-align:left;margin:9px 0 0 39px;max-width:none}
+    .eyebrow{font-size:10px;max-width:100%;white-space:normal}
+    .plan{padding:20px 17px 18px}
+    .comparison-grid{min-width:540px}
+  }
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="brand">
+        <div class="brand-mark">SR</div>
+      <a href="https://www.instagram.com/aree_sagar" target="_blank">
+        SAGAR RUDACH <span class="verified">✓</span>
+      </a>
+    </div>
+    <div class="location">FOR THE LIT SOCIAL · MALAYSIA</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Part-time video editor · Remote</div>
+        <h1>VIDEO<br><span>EDITING</span><br>RATES</h1>
+        <p class="hero-copy">
+          A simple monthly setup for <strong>short-form social content</strong> —
+          built for an agency workflow where consistency, speed and creative quality matter.
+        </p>
+        <div class="hero-note">
+          <span class="pill">RM / MONTH</span>
+          <span class="pill">SHORT-FORM FIRST</span>
+          <span class="pill">REMOTE</span>
+          <span class="pill">FLEXIBLE WORKFLOW</span>
+        </div>
+      </div>
+
+      <aside class="profile-card">
+        <a href="https://www.linktr.ee/sagarrudach" target="_blank">
+        <div class="star"></div>
+        <div class="profile-head">
+          <div class="avatar">SR</div>
+          <div>
+            <div class="profile-name">SAGAR RUDACH</div>
+            <div class="handle">@aree_sagar · Freelance Video Editor</div>
+          </div>
+        </div>
+        </a>
+
+        <div class="stats">
+          <div class="stat"><b>29+</b><small>Clients</small></div>
+          <div class="stat"><b>package</b><small>Options</small></div>
+          <div class="stat"><b>350+</b><small>Video edits</small></div>
+        </div>
+
+        <div class="mini-rate">
+          <div>
+            <small>Suggested starting point</small>
+            <strong>RM2,000–2,500</strong>
+          </div>
+          <span>polished<br>social edits</span>
+        </div>
+      </aside>
+    </section>
+
+    <div class="section-title">
+      <h2>Choose your edit level</h2>
+      <div class="line"></div>
+    </div>
+
+    <section class="pricing">
+
+      <article class="plan">
+        <div class="plan-label">Option A</div>
+        <h3>Light Part-Time</h3>
+        <div class="price">RM1,700</div>
+        <div class="per">PER MONTH</div>
+
+        <ul class="features">
+          <li>15–20 short-form videos (15 - 60 seconds)</li>
+          <li>Basic → moderate editing</li>
+          <li>Captions</li>
+          <li>Music / SFX</li>
+          <li>Basic colour</li>
+          <li>mutually agreed number of revisions </li>
+        </ul>
+
+        <div class="hours">Best when client has light workload</div>
+        <div class="plan-button">Light workload</div>
+      </article>
+
+      <article class="plan recommended">
+        <div class="badge">Recommended</div>
+        <div class="plan-label">Option B</div>
+        <h3>Polished Social</h3>
+        <div class="price">RM2,000–2,500</div>
+        <div class="per">PER MONTH</div>
+
+        <ul class="features">
+          <li>20–30 short-form videos (15 - 60 seconds)</li>
+          <li>More polished editing</li>
+          <li>Motion graphics</li>
+          <li>Captions</li>
+          <li>Sound design</li>
+          <li>Colour correction</li>
+          <li>mutually agreed number of revisions</li>
+          <li>Consistent brand styles</li>
+        </ul>
+
+        <div class="hours">Best when client has moderate workload</div>
+        <div class="plan-button">Best balance</div>
+      </article>
+
+      <article class="plan">
+        <div class="plan-label">Option C</div>
+        <h3>Advanced</h3>
+        <div class="price">RM3,000–3,500</div>
+        <div class="per">PER MONTH</div>
+
+        <ul class="features">
+          <li>25–40 videos (45 - 95 seconds)</li>
+          <li>More complex edits</li>
+          <li>Motion graphics / After Effects</li>
+          <li>Ads + organic content</li>
+          <li>Multiple clients / brands</li>
+          <li>Faster turnaround</li>
+          <li>Creative input</li>
+        </ul>
+
+        <div class="hours">Best when client has high workload</div>
+        <div class="plan-button">Advanced workflow</div>
+      </article>
+
+    </section>
+
+    <section class="section-hero-note">
+      <aside class="note">
+  <div class="section-title">
+    <h2>Trial month</h2>
+    <div class="line"></div>
+  </div>     
+        <div class="mini-rate">
+          <div>
+            <small>New on boarding clients</small>
+            <p></p>
+            <strong>First month would be on trial basis, a discount on the price can be aviled for new clients</strong>
+      </aside>
+    
+    <section class="comparison">
+      <h2>At a glance</h2>
+      <div class="comparison-grid">
+        <div class="head">Included</div>
+        <div class="head">A · RM1.7K</div>
+        <div class="head">B · RM2–2.5K</div>
+        <div class="head">C · RM3–3.5K</div>
+
+        <div>Short-form volume</div><div>15–20</div><div>20–30</div><div>25–40</div>
+        <div>Editing complexity</div><div>Basic–Moderate</div><div>Polished</div><div>Complex</div>
+        <div>Motion graphics</div><div>—</div><div>✓</div><div>✓ + AE</div>
+        <div>Sound design</div><div>Basic</div><div>✓</div><div>✓</div>
+        <div>Revisions</div><div>2</div><div>2–4</div><div>Workflow-based</div>
+        <div>Creative input</div><div>—</div><div>Some</div><div>✓</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-big">LET'S MAKE<br><span>GOOD</span> CONTENT.</div>
+    <div class="footer-note">
+      Monthly rates are structured around short-form social media production.
+      Exact volume and turnaround can be adjusted around the agency's content calendar,
+      client mix and editing requirements.
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
