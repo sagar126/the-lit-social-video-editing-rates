@@ -11,6 +11,186 @@ Video Editing Rates">
 <meta property="og:description" content="Social video editing packages and rates for THE LIT.">
 <title>Sagar Rudach — Video Editor Rates</title>
 <style>
+  /* ==============================
+   CURRENCY SELECTOR
+   ============================== */
+
+.currency-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(17, 21, 26, .88);
+  backdrop-filter: blur(8px);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, visibility .25s ease;
+}
+
+.currency-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.currency-modal {
+  width: min(520px, 100%);
+
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+
+  padding: clamp(25px, 5vw, 40px);
+
+  box-shadow: 12px 12px 0 var(--blue);
+
+  transform: translateY(20px) rotate(-.6deg);
+  transition: transform .3s ease;
+}
+
+.currency-overlay.active .currency-modal {
+  transform: translateY(0) rotate(-.6deg);
+}
+
+.currency-kicker {
+  display: inline-block;
+
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+
+  padding: 6px 10px;
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.currency-modal h2 {
+  margin: 18px 0 10px;
+
+  font-family: Impact, Haettenschweiler,
+    "Arial Narrow Bold", sans-serif;
+
+  font-size: clamp(42px, 9vw, 65px);
+  line-height: .88;
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+}
+
+.currency-modal h2 span {
+  color: var(--blue);
+  -webkit-text-stroke: 1px var(--ink);
+}
+
+.currency-modal > p {
+  margin: 0 0 25px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.currency-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.currency-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+
+  padding: 13px;
+
+  background: var(--white);
+  color: var(--ink);
+
+  border: 2px solid var(--ink);
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    box-shadow .15s ease;
+}
+
+.currency-option:hover {
+  background: var(--blue);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.currency-option:last-child {
+  grid-column: 1 / -1;
+}
+
+.currency-flag {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.currency-option strong {
+  display: block;
+
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.currency-option small {
+  display: block;
+
+  margin-top: 2px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.currency-option:hover small {
+  color: var(--ink);
+}
+
+.currency-note {
+  margin-top: 18px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media(max-width: 500px) {
+  .currency-options {
+    grid-template-columns: 1fr;
+  }
+
+  .currency-option:last-child {
+    grid-column: auto;
+  }
+
+  .currency-modal {
+    box-shadow: 7px 7px 0 var(--blue);
+  }
+}
+
   :root{
     --blue:#62a9e8;
     --blue-dark:#428fd2;
@@ -567,6 +747,68 @@ Video Editing Rates">
 </head>
 
 <body>
+
+  <!-- Currency Selector -->
+<div class="currency-overlay" id="currencyOverlay">
+  <div class="currency-modal">
+    <div class="currency-kicker">WELCOME</div>
+
+    <h2>SELECT<br><span>YOUR CURRENCY.</span></h2>
+
+    <p>
+      Choose the currency you'd like to see the rates in.
+    </p>
+
+    <div class="currency-options">
+
+      <button class="currency-option" data-currency="USD">
+        <span class="currency-flag">🇺🇸</span>
+        <span>
+          <strong>USD</strong>
+          <small>US Dollar</small>
+        </span>
+      </button>
+
+      <button class="currency-option" data-currency="INR">
+        <span class="currency-flag">🇮🇳</span>
+        <span>
+          <strong>INR</strong>
+          <small>Indian Rupee</small>
+        </span>
+      </button>
+
+      <button class="currency-option" data-currency="MYR">
+        <span class="currency-flag">🇲🇾</span>
+        <span>
+          <strong>MYR</strong>
+          <small>Malaysian Ringgit</small>
+        </span>
+      </button>
+
+      <button class="currency-option" data-currency="EUR">
+        <span class="currency-flag">🇪🇺</span>
+        <span>
+          <strong>EUR</strong>
+          <small>Euro</small>
+        </span>
+      </button>
+
+      <button class="currency-option" data-currency="GBP">
+        <span class="currency-flag">🇬🇧</span>
+        <span>
+          <strong>GBP</strong>
+          <small>British Pound</small>
+        </span>
+      </button>
+
+    </div>
+
+    <div class="currency-note">
+      Prices are approximate conversions from INR.
+    </div>
+  </div>
+</div>
+
 <div class="page">
 
   <header class="topbar">
@@ -589,7 +831,7 @@ Video Editing Rates">
           built for an agency workflow where consistency, speed and creative quality matter.
         </p>
         <div class="hero-note">
-          <span class="pill">RM / MONTH</span>
+          <span class="pill" data-currency-label>INR / MONTH</span>
           <span class="pill">SHORT-FORM FIRST</span>
           <span class="pill">REMOTE</span>
           <span class="pill">FLEXIBLE WORKFLOW</span>
@@ -735,5 +977,270 @@ Video Editing Rates">
   </footer>
 
 </div>
+<script>
+/* ==============================
+   CURRENCY SYSTEM
+   Base currency: MYR
+   ============================== */
+
+const currencyData = {
+  MYR: {
+    symbol: 'RM',
+    locale: 'en-MY'
+  },
+  USD: {
+    symbol: '$',
+    locale: 'en-US'
+  },
+  INR: {
+    symbol: '₹',
+    locale: 'en-IN'
+  },
+  EUR: {
+    symbol: '€',
+    locale: 'de-DE'
+  },
+  GBP: {
+    symbol: '£',
+    locale: 'en-GB'
+  }
+};
+
+
+/*
+  Approximate fallback rates.
+  These are only used if the live exchange-rate request fails.
+*/
+const fallbackRates = {
+  MYR: 1,
+  USD: 0.237,
+  INR: 22.15,
+  EUR: 0.202,
+  GBP: 0.176
+};
+
+
+let exchangeRates = { ...fallbackRates };
+let selectedCurrency = localStorage.getItem('selectedCurrency');
+
+
+/* --------------------------------
+   Currency formatting
+   -------------------------------- */
+
+function formatCurrency(amount) {
+
+  const currency = currencyData[selectedCurrency];
+
+  const convertedAmount =
+    amount * exchangeRates[selectedCurrency];
+
+  const rounded =
+    Math.round(convertedAmount);
+
+  return new Intl.NumberFormat(currency.locale, {
+    style: 'currency',
+    currency: selectedCurrency,
+    maximumFractionDigits: 0
+  }).format(rounded);
+}
+
+
+/* --------------------------------
+   Convert prices on the page
+   -------------------------------- */
+
+function updatePrices() {
+
+  /*
+    Elements that contain prices should
+    have the class .currency-price
+  */
+
+  document.querySelectorAll('.currency-price')
+    .forEach(element => {
+
+      const min = Number(element.dataset.min);
+      const max = element.dataset.max;
+
+      if (max) {
+
+        element.textContent =
+          `${formatCurrency(min)}–${formatCurrency(Number(max))}`;
+
+      } else {
+
+        element.textContent =
+          formatCurrency(min);
+      }
+
+    });
+
+
+  /* Update currency pills */
+
+  document.querySelectorAll('[data-currency-label]')
+    .forEach(element => {
+
+      element.textContent =
+        selectedCurrency + ' / MONTH';
+
+    });
+}
+
+
+/* --------------------------------
+   Add currency classes to existing
+   price elements
+   -------------------------------- */
+
+function setupPrices() {
+
+  const prices = document.querySelectorAll('.price');
+
+  prices.forEach(price => {
+
+    const text = price.textContent
+      .replace(/RM/g, '')
+      .replace(/,/g, '')
+      .trim();
+
+    const range = text.match(
+      /^([\d.]+)\s*[–-]\s*([\d.]+)$/
+    );
+
+    const single = text.match(
+      /^([\d.]+)$/
+    );
+
+    price.classList.add('currency-price');
+
+    if (range) {
+
+      price.dataset.min = range[1];
+      price.dataset.max = range[2];
+
+    } else if (single) {
+
+      price.dataset.min = single[1];
+
+    }
+
+  });
+}
+
+
+/* --------------------------------
+   Load live exchange rates
+   -------------------------------- */
+
+async function loadExchangeRates() {
+
+  try {
+
+    const response = await fetch(
+      'https://api.frankfurter.app/latest?from=MYR&to=USD,INR,EUR,GBP'
+    );
+
+    if (!response.ok) {
+      throw new Error('Exchange rate request failed');
+    }
+
+    const data = await response.json();
+
+    exchangeRates = {
+      MYR: 1,
+      ...data.rates
+    };
+
+  } catch (error) {
+
+    console.warn(
+      'Using fallback exchange rates.',
+      error
+    );
+
+  }
+
+  updatePrices();
+}
+
+
+/* --------------------------------
+   Currency modal
+   -------------------------------- */
+
+const overlay =
+  document.getElementById('currencyOverlay');
+
+const currencyButtons =
+  document.querySelectorAll('.currency-option');
+
+
+function closeCurrencyModal() {
+
+  overlay.classList.remove('active');
+
+  document.body.style.overflow = '';
+}
+
+
+function selectCurrency(currency) {
+
+  selectedCurrency = currency;
+
+  localStorage.setItem(
+    'selectedCurrency',
+    currency
+  );
+
+  updatePrices();
+
+  closeCurrencyModal();
+}
+
+
+currencyButtons.forEach(button => {
+
+  button.addEventListener('click', () => {
+
+    selectCurrency(
+      button.dataset.currency
+    );
+
+  });
+
+});
+
+
+/* --------------------------------
+   First visit behaviour
+   -------------------------------- */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  setupPrices();
+
+  /*
+    If the user hasn't selected a currency,
+    show the popup.
+  */
+
+  if (!selectedCurrency) {
+
+    overlay.classList.add('active');
+
+    document.body.style.overflow = 'hidden';
+
+  } else {
+
+    updatePrices();
+
+  }
+
+  loadExchangeRates();
+
+});
+</script>
 </body>
 </html>
