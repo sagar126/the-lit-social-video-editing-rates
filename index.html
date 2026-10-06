@@ -818,7 +818,7 @@ Video Editing Rates">
         SAGAR RUDACH <span class="verified">✓</span>
       </a>
     </div>
-    <div class="location">FOR THE LIT SOCIAL · MALAYSIA</div>
+    <div class="location">FOR THE SOCIAL · GLOBAL</div>
   </header>
 
   <main>
@@ -859,7 +859,7 @@ Video Editing Rates">
         <div class="mini-rate">
           <div>
             <small>Suggested starting point</small>
-            <strong>RM2,000–2,500</strong>
+            <strong><div class="price" data-min="25000">₹25,000</div></strong>
           </div>
           <span>polished<br>social edits</span>
         </div>
@@ -876,7 +876,7 @@ Video Editing Rates">
       <article class="plan">
         <div class="plan-label">Option A</div>
         <h3>Light Part-Time</h3>
-        <div class="price">RM1,700</div>
+        <div class="price" data-min="15000">₹15,000</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -896,7 +896,7 @@ Video Editing Rates">
         <div class="badge">Recommended</div>
         <div class="plan-label">Option B</div>
         <h3>Polished Social</h3>
-        <div class="price">RM2,000–2,500</div>
+        <div class="price" data-min="25000" data-max="30500">₹25,000 – ₹30,500</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -917,7 +917,7 @@ Video Editing Rates">
       <article class="plan">
         <div class="plan-label">Option C</div>
         <h3>Advanced</h3>
-        <div class="price">RM3,000–3,500</div>
+        <div class="price" data-min="40000" data-max="45500">₹40,000 – ₹45,500</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -953,17 +953,16 @@ Video Editing Rates">
       <h2>At a glance</h2>
       <div class="comparison-grid">
         <div class="head">Included</div>
-        <div class="head">A · RM1.7K</div>
-        <div class="head">B · RM2–2.5K</div>
-        <div class="head">C · RM3–3.5K</div>
+        <div class="head">A · IN 15,000</div>
+        <div class="head">B · IN 25,000–30,500</div>
+        <div class="head">C · IN 40,000–45,500</div>
 
         <div>Short-form volume</div><div>15–20</div><div>20–30</div><div>25–40</div>
         <div>Editing complexity</div><div>Basic–Moderate</div><div>Polished</div><div>Complex</div>
         <div>Motion graphics</div><div>—</div><div>✓</div><div>✓ + AE</div>
         <div>Sound design</div><div>Basic</div><div>✓</div><div>✓</div>
         <div>Revisions</div><div>2(avrage)</div><div>2–4(avrage)</div><div>Workflow-based</div>
-        <div>Creative input</div><div>—</div><div>Some</div><div>✓</div>
-      </div>
+        <div>Creative input</div><div>—</div><div>Some</ div>< div > ✓ </ div >
     </section>
   </main>
 
@@ -978,23 +977,24 @@ Video Editing Rates">
 
 </div>
 <script>
+
 /* ==============================
    CURRENCY SYSTEM
-   Base currency: MYR
+   Base currency: INR
    ============================== */
 
 const currencyData = {
-  MYR: {
-    symbol: 'RM',
-    locale: 'en-MY'
+  INR: {
+    symbol: '₹',
+    locale: 'en-IN'
   },
   USD: {
     symbol: '$',
     locale: 'en-US'
   },
-  INR: {
-    symbol: '₹',
-    locale: 'en-IN'
+  MYR: {
+    symbol: 'RM',
+    locale: 'en-MY'
   },
   EUR: {
     symbol: '€',
@@ -1006,19 +1006,13 @@ const currencyData = {
   }
 };
 
-
-/*
-  Approximate fallback rates.
-  These are only used if the live exchange-rate request fails.
-*/
 const fallbackRates = {
-  MYR: 1,
-  USD: 0.237,
-  INR: 22.15,
-  EUR: 0.202,
-  GBP: 0.176
+  INR: 1,
+  USD: 0.0117,
+  MYR: 0.050,
+  EUR: 0.0100,
+  GBP: 0.0087
 };
-
 
 let exchangeRates = { ...fallbackRates };
 let selectedCurrency = localStorage.getItem('selectedCurrency');
@@ -1031,13 +1025,10 @@ let selectedCurrency = localStorage.getItem('selectedCurrency');
 function formatCurrency(amount) {
 
   const currency = currencyData[selectedCurrency];
-
   const convertedAmount =
     amount * exchangeRates[selectedCurrency];
-
   const rounded =
     Math.round(convertedAmount);
-
   return new Intl.NumberFormat(currency.locale, {
     style: 'currency',
     currency: selectedCurrency,
@@ -1062,18 +1053,13 @@ function updatePrices() {
 
       const min = Number(element.dataset.min);
       const max = element.dataset.max;
-
       if (max) {
-
         element.textContent =
           `${formatCurrency(min)}–${formatCurrency(Number(max))}`;
-
       } else {
-
         element.textContent =
           formatCurrency(min);
       }
-
     });
 
 
@@ -1081,7 +1067,6 @@ function updatePrices() {
 
   document.querySelectorAll('[data-currency-label]')
     .forEach(element => {
-
       element.textContent =
         selectedCurrency + ' / MONTH';
 
@@ -1095,51 +1080,35 @@ function updatePrices() {
    -------------------------------- */
 
 function setupPrices() {
-
   const prices = document.querySelectorAll('.price');
-
   prices.forEach(price => {
-
     const text = price.textContent
       .replace(/RM/g, '')
       .replace(/,/g, '')
       .trim();
-
     const range = text.match(
       /^([\d.]+)\s*[–-]\s*([\d.]+)$/
     );
-
     const single = text.match(
       /^([\d.]+)$/
     );
-
     price.classList.add('currency-price');
-
     if (range) {
-
       price.dataset.min = range[1];
       price.dataset.max = range[2];
-
     } else if (single) {
-
       price.dataset.min = single[1];
-
     }
-
   });
 }
 
-
-/* --------------------------------
-   Load live exchange rates
-   -------------------------------- */
 
 async function loadExchangeRates() {
 
   try {
 
     const response = await fetch(
-      'https://api.frankfurter.app/latest?from=MYR&to=USD,INR,EUR,GBP'
+      'https://api.frankfurter.app/latest?from=INR&to=USD,MYR,EUR,GBP'
     );
 
     if (!response.ok) {
@@ -1149,7 +1118,7 @@ async function loadExchangeRates() {
     const data = await response.json();
 
     exchangeRates = {
-      MYR: 1,
+      INR: 1,
       ...data.rates
     };
 
@@ -1178,9 +1147,7 @@ const currencyButtons =
 
 
 function closeCurrencyModal() {
-
   overlay.classList.remove('active');
-
   document.body.style.overflow = '';
 }
 
