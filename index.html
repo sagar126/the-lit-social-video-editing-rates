@@ -253,6 +253,43 @@ Video Editing Rates">
 
   .brand a{color:inherit;text-decoration:none}
 
+  
+/* Persistent currency dropdown */
+.currency-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.currency-trigger:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.currency-trigger:focus-visible {
+  outline: 3px solid var(--blue-dark);
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .currency-trigger {
+    padding: 7px 9px;
+    font-size: 10px;
+  }
+}
+
+
   .brand-mark{
     width:30px;height:30px;border-radius:50%;
     background:var(--blue);
@@ -818,7 +855,15 @@ Video Editing Rates">
         SAGAR RUDACH <span class="verified">✓</span>
       </a>
     </div>
-    <div class="location">FOR THE SOCIAL · GLOBAL</div>
+    
+<div class="location">FOR THE SOCIAL · GLOBAL</div>
+
+<button class="currency-trigger" id="currencyTrigger" type="button"
+        aria-label="Change currency">
+  <span id="currentCurrencyLabel">INR</span>
+  <span aria-hidden="true">▾</span>
+</button>
+
   </header>
 
   <main>
@@ -876,7 +921,7 @@ Video Editing Rates">
       <article class="plan">
         <div class="plan-label">Option A</div>
         <h3>Light Part-Time</h3>
-        <div class="price" data-min="15000">₹15,000</div>
+        <div class="price" data-min="20000">₹20,000</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -896,7 +941,7 @@ Video Editing Rates">
         <div class="badge">Recommended</div>
         <div class="plan-label">Option B</div>
         <h3>Polished Social</h3>
-        <div class="price" data-min="25000" data-max="30500">₹25,000 – ₹30,500</div>
+        <div class="price" data-min="30000" data-max="35500">₹30,000 – ₹35,500</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -917,7 +962,7 @@ Video Editing Rates">
       <article class="plan">
         <div class="plan-label">Option C</div>
         <h3>Advanced</h3>
-        <div class="price" data-min="40000" data-max="45500">₹40,000 – ₹45,500</div>
+        <div class="price" data-min="42000" data-max="47500">₹42,000 – ₹47,500</div>
         <div class="per">PER MONTH</div>
 
         <ul class="features">
@@ -953,9 +998,9 @@ Video Editing Rates">
       <h2>At a glance</h2>
       <div class="comparison-grid">
         <div class="head">Included</div>
-        <div class="head">A · IN 15,000</div>
-        <div class="head">B · IN 25,000–30,500</div>
-        <div class="head">C · IN 40,000–45,500</div>
+        <div class="head">A · IN 20,000</div>
+        <div class="head">B · IN 30,000–35,500</div>
+        <div class="head">C · IN 42,000–47,500</div>
 
         <div>Short-form volume</div><div>15–20</div><div>20–30</div><div>25–40</div>
         <div>Editing complexity</div><div>Basic–Moderate</div><div>Polished</div><div>Complex</div>
@@ -1016,6 +1061,9 @@ const fallbackRates = {
 
 let exchangeRates = { ...fallbackRates };
 let selectedCurrency = localStorage.getItem('selectedCurrency');
+if (!Object.prototype.hasOwnProperty.call(currencyData, selectedCurrency)) {
+  selectedCurrency = 'INR';
+}
 
 
 /* --------------------------------
@@ -1083,7 +1131,8 @@ function setupPrices() {
   const prices = document.querySelectorAll('.price');
   prices.forEach(price => {
     const text = price.textContent
-      .replace(/RM/g, '')
+      .replace(/[₹$€£]/g, '')
+      .replace(/\bRM\b/g, '')
       .replace(/,/g, '')
       .trim();
     const range = text.match(
@@ -1098,6 +1147,7 @@ function setupPrices() {
       price.dataset.max = range[2];
     } else if (single) {
       price.dataset.min = single[1];
+      delete price.dataset.max;
     }
   });
 }
@@ -1145,6 +1195,19 @@ const overlay =
 const currencyButtons =
   document.querySelectorAll('.currency-option');
 
+// Permanent currency dropdown in the navigation
+const currencyTrigger =
+  document.getElementById('currencyTrigger');
+
+const currentCurrencyLabel =
+  document.getElementById('currentCurrencyLabel');
+
+// Open the existing currency selection popup
+currencyTrigger.addEventListener('click', () => {
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+});
+
 
 function closeCurrencyModal() {
   overlay.classList.remove('active');
@@ -1154,6 +1217,10 @@ function closeCurrencyModal() {
 
 function selectCurrency(currency) {
 
+  if (!Object.prototype.hasOwnProperty.call(currencyData, currency)) {
+    return;
+  }
+
   selectedCurrency = currency;
 
   localStorage.setItem(
@@ -1161,8 +1228,19 @@ function selectCurrency(currency) {
     currency
   );
 
-  updatePrices();
+  currentCurrencyLabel.textContent = currency;
+  /* Update currency pills */
 
+document.querySelectorAll('[data-currency-label]')
+  .forEach(element => {
+    element.textContent =
+      selectedCurrency + ' / MONTH';
+  });
+  // Update the permanent dropdown button
+if (currentCurrencyLabel) {
+  currentCurrencyLabel.textContent = selectedCurrency;
+}
+  updatePrices();
   closeCurrencyModal();
 }
 
@@ -1185,26 +1263,8 @@ currencyButtons.forEach(button => {
    -------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
-
   setupPrices();
-
-  /*
-    If the user hasn't selected a currency,
-    show the popup.
-  */
-
-  if (!selectedCurrency) {
-
-    overlay.classList.add('active');
-
-    document.body.style.overflow = 'hidden';
-
-  } else {
-
-    updatePrices();
-
-  }
-
+  currentCurrencyLabel.textContent = selectedCurrency;
   loadExchangeRates();
 
 });
